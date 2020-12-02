@@ -80,18 +80,21 @@ def model_predict(text_data):
             prediction = output['prediction']
             score = output['score']
 
+        # Si obtenemos respuesta, extraemos la predicción y el
+        # score para ser devueltos como salida de esta función.
+            print(json.dumps({
+            'text': text_data,
+            'prediction': prediction,
+            'score': score
+        }))
+
             db.delete(job_id)
             break
         # Si no obtenemos respuesta, dormimos el proceso algunos milisegundos.
         time.sleep(2)
         #################################################################
-        # Si obtenemos respuesta, extraemos la predicción y el
-        # score para ser devueltos como salida de esta función.
-        print(json.dumps({
-            'text': text_data,
-            'prediction': prediction,
-            'score': score
-        }))
+        
+        
 
     return prediction, score
     
