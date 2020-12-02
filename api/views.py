@@ -6,6 +6,8 @@ from flask import (
     render_template,
 )
 
+from middleware import model_predict
+
 
 router = Blueprint('app_name',
                    __name__,
@@ -29,12 +31,21 @@ def index():
 
     if text_data:
         #################################################################
-        # COMPLETAR AQUI: Envie el texto ingresado para ser procesado
-        # por nuestra función middleware.model_predict.
-        # Luego con los resultados obtenidos, complete el diccionario
-        # "context" para mostrar la predicción en el frontend.
+        # COMPLETO: 
         #################################################################
-        raise NotImplementedError
+        # Se Envia el texto ingresado para ser procesado
+        # por nuestra función middleware.model_predict.
+        prediction, score = model_predict(text_data)
+       
+        # Con los resultados obtenidos completamos el diccionario "context"
+        # para mostrar la predicción en el frontend.
+        context = {
+            'text': text_data,
+            'prediction': prediction,
+            'score': score,
+            'success': True
+        }
+        
         #################################################################
 
     return render_template('index.html', context=context)
@@ -60,7 +71,7 @@ def feedback():
 @router.route('/predict', methods=['POST'])
 def predict():
     """
-    Método POST que permite obtener predicciones de analisis de
+    Método POST que permite obtener predicciones de análisis de
     sentimiento a partir de oraciones.
     """
     # Respuesta inicial
@@ -74,13 +85,21 @@ def predict():
     # para procesar
     if request.method == 'POST' and request.args.get('text'):
         #################################################################
-        # COMPLETAR AQUI: Extraiga la sentencia a procesar y utilice la
+        # COMPLETO: 
+        #################################################################
+        # Extraemos la sentencia a procesar y utilizamos la
         # función middleware.model_predict para obtener el sentimiento
-        # de la misma. Complete los campos de "rpse" con los valores
-        # obtenidos.
-        #################################################################
-        raise NotImplementedError
-        #################################################################
+        # de la misma.
+        text_data = request.args.get('text')
+        prediction, score = model_predict(text_data)
+
+        # se completan los campos de "rpse" con los valores obtenidos.
+        rpse = {
+        'text': text_data,
+        'prediction': prediction,
+        'score': score, 
+        'success': True
+        }
 
         return jsonify(rpse)
 

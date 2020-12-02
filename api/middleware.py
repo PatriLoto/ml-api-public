@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
 
+import settings
+from uuid import uuid4
+import redis
+import json
+import time
+
 ########################################################################
-# COMPLETAR AQUI: Crear conexion a redis y asignarla a la variable "db".
-########################################################################
-db = None
+# COMPLETO: 
+# Se crea la conexion a redis y asignarla a la variable "db".
+
+db = redis.Redis(port = settings.REDIS_PORT, host = settings.REDIS_HOST, db = settings.REDIS_DB_ID)
 ########################################################################
 
 
@@ -21,7 +28,7 @@ def model_predict(text_data):
     Returns
     -------
     prediction : str
-        Sentimiento de la oración. Puede ser uno de: "Positivo",
+        Sentimiento de la oración. Puede ser: "Positivo",
         "Neutral" o "Negativo".
     score : float
         Valor entre 0 y 1 que especifica el grado de positividad
@@ -31,21 +38,32 @@ def model_predict(text_data):
     score = None
 
     #################################################################
-    # COMPLETAR AQUI: Crearemos una tarea para enviar a procesar.
+    # COMPLETO:
     # Una tarea esta definida como un diccionario con dos entradas:
     #     - "id": será un hash aleatorio generado con uuid4 o
     #       similar, deberá ser de tipo string.
     #     - "text": texto que se quiere procesar, deberá ser de tipo
     #       string.
-    # Luego utilice rpush de Redis para encolar la tarea.
     #################################################################
-    raise NotImplementedError
+    # Creamos una tarea para enviar a procesar
+    job_id = str(uuid4())
+    string text = ' '
+
+    # Definimos la tarea como un diccionario con dos entradas: id y text.
+    job_data = {
+        "id": job_id,
+        "text": text_data
+    }
+    # utilizamos rpush de Redis para encolar la tarea.
+    db.rpush('service_queue',json.dumps(job_data))
+    
+    
     #################################################################
 
     # Iterar hasta recibir el resultado
-    while True:
+    # while True:
         #################################################################
-        # COMPLETAR AQUI: En cada iteración tenemos que:
+        # COMPLETO: En cada iteración tenemos que:
         #     1. Intentar obtener resultados desde Redis utilizando
         #        como key nuestro "job_id".
         #     2. Si no obtuvimos respuesta, dormir el proceso algunos
@@ -53,7 +71,27 @@ def model_predict(text_data):
         #     3. Si obtuvimos respuesta, extraiga la predicción y el
         #        score para ser devueltos como salida de esta función.
         #################################################################
-        raise NotImplementedError
+    while True
+        # Intentamos obtener resultados desde Redis utilizando
+        # como key nuestro "job_id".
+        output = db.get(job_id)
+        if output is not None:
+            output = json.loads(output.decode('utf-8'))
+            prediction = output['prediction']
+            score = output['score']
+
+            db.delete(job_id)
+            break
+        # Si no obtenemos respuesta, dormimos el proceso algunos milisegundos.
+        time.sleep(2)
         #################################################################
+        # Si obtenemos respuesta, extraemos la predicción y el
+        # score para ser devueltos como salida de esta función.
+        print(json.dumps({
+            'text': text_data,
+            'prediction': prediction,
+            'score': score
+        }))
 
     return prediction, score
+    
