@@ -47,7 +47,7 @@ def sentiment_from_score(score):
     # se agrega el if 
     if score < 0.45:
         sentiment = 'Negativo'
-    elif score < 0.55
+    elif score < 0.55:
         sentiment = 'Neutral'
     else:
         sentiment= 'Positivo'    
