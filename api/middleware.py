@@ -93,8 +93,6 @@ def model_predict(text_data):
         # Si no obtenemos respuesta, dormimos el proceso algunos milisegundos.
         time.sleep(2)
         #################################################################
-        
-        
-
+       
     return prediction, score
     
