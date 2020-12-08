@@ -47,8 +47,7 @@ def model_predict(text_data):
     #################################################################
     # Creamos una tarea para enviar a procesar
     job_id = str(uuid4())
-    string text = ' '
-
+    
     # Definimos la tarea como un diccionario con dos entradas: id y text.
     job_data = {
         "id": job_id,
