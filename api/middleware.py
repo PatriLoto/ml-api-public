@@ -55,10 +55,7 @@ def model_predict(text_data):
     }
     # utilizamos rpush de Redis para encolar la tarea.
     db.rpush('service_queue',json.dumps(job_data))
-    
-    
     #################################################################
-
     # Iterar hasta recibir el resultado
     # while True:
         #################################################################
@@ -70,7 +67,7 @@ def model_predict(text_data):
         #     3. Si obtuvimos respuesta, extraiga la predicción y el
         #        score para ser devueltos como salida de esta función.
         #################################################################
-    while True
+    while True:
         # Intentamos obtener resultados desde Redis utilizando
         # como key nuestro "job_id".
         output = db.get(job_id)
